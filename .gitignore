@@ -1,0 +1,79 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg-info/
+.eggs/
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# Editor files and directories
+.vscode/
+.idea/
+*.sublime-workspace
+*.swp
+*~
+# macOS files
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Configuration files
+.env
+config.local.py
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Test reports
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Miscellaneous
+build/
+dist/
+*.egg
+*.whl
+response.json
+
+# Local .terraform directories
+**/.terraform/
+**/.terraform.lock.hcl
+
+# .tfstate files (Terraform state files and their backups)
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Terraform variable files (potentially containing sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Terraform override files (often used for local development and not meant for version control)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan files (output of terraform plan -out=tfplan)
+*tfplan*
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
+# Project compilation files
+lambda_dashboard.zip
+lambda_dashboard/
