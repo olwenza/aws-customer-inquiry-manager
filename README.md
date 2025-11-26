@@ -69,7 +69,7 @@ brew install aws-sam-cli
 * TBD/NA
 
 ### Executing program
-#### - Create s3 bucket with auto deploy via github actions
+#### - Create website in s3 bucket with auto deploy via github actions
 1. Create s3 bucket for react app
 ```
 aws s3 mb s3://landing-page-dev-ivan \
@@ -141,6 +141,56 @@ aws cloudfront list-distributions \
 ```
 
 12. View the website - copy and paste domain name from previous step on your browser and hard reset page.
+
+#### - Create lambda function for chatbot
+1. Create/Update a new managed IAM policy for the lamda role
+```
+aws iam create-policy \
+  --policy-name BedrockInlinePolicy \
+  --policy-document file://bedrock-inline-policy.json
+```
+
+2. Attach the newly created policy to the Lambda role.(get policy-arn from previous step)
+```
+aws iam attach-role-policy \
+  --role-name lambda-website-uptime-monitor-role \
+  --policy-arn arn:aws:iam::697227439720:policy/BedrockInlinePolicy
+```
+
+3. Create file for lambda function and add code
+```
+touch chat-bot.py
+```
+
+4. Compile code to spot any errors
+```
+python chat-bot.py
+```
+
+5. Zip chat-bot.py file for deployment to AWS lambda
+```
+zip function.zip chat-bot.py
+```
+
+5.  Create lambda function in aws for bedrock chat bot
+```
+aws lambda create-function \
+  --function-name chatBot \
+  --runtime python3.12 \
+  --role arn:aws:iam::697227439720:role/lambda-website-uptime-monitor-role \
+  --handler chat-bot.lambda_handler \
+  --zip-file fileb://function.zip
+```
+
+6. Create template.yaml file for your local config/env
+```
+touch template.yaml
+```
+
+7. Test lamda function locally
+```
+echo '{"message": "How do I book?"}' | sam local invoke ChatBotFunction --event -
+```
 
 ## Authors
 
