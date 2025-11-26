@@ -76,4 +76,4 @@ terraform.rc
 
 # Project compilation files
 .local
-.yaml
+*yaml
