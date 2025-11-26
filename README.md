@@ -1,4 +1,4 @@
-# Project Title
+# 🚀 Project Title
 
 AWS - Customer Inquiry Manager
 
@@ -6,12 +6,29 @@ AWS - Customer Inquiry Manager
 Project handles customers inquiries via a business website
 
 
-# Outline 
+# 📝 Outline 
 1. Build a simple web app on EC2
 2. AWS Bedrock reads and interprets message content
 3. Store on inquiry data to RDS/Mysql
 4. Depending on message data categorization, notification send via SES
 5. Create Cloudwatch events to trigger daily checks for auto follow-up
+
+# 🛠 Tech Stack
+| Technology         | Purpose               |
+| -------------------|-----------------------|
+| Terraform          | Create environment.   |
+| AWS EC2            | Web server            |
+| AWS Bedrock        | Build gen AI apps     |
+| AWS RDS            | Data Management       |
+| AWS SES            | Email notification    |
+| AWS Cloudwatch     | Trigger notifications |
+| React              | UI library            |
+| Redux Toolkit      | State management      |
+| React Router       | Routing               |
+| Axios              | HTTP requests         |
+| Vite               | Build tool            |
+| Tailwindcss        | CSS library           |
+| AWS Incognito      | User management       |
 
 ## Getting Started
 
@@ -42,40 +59,88 @@ awscli --version
 awscli configure
 ```
 
+* Install AWS Serverless Application Model  (SAM) - need for running Lambda locally
+```
+brew install aws-sam-cli
+```
+
 ### Installing
 
 * TBD/NA
 
 ### Executing program
-### 1- Build a simple web app on EC2
-* TBD
+#### - Create s3 bucket with auto deploy via github actions
+1. Create s3 bucket for react app
 ```
-TBD
+aws s3 mb s3://landing-page-dev-ivan \
+    --region us-east-1
+``` 
+
+2. Enable static website hosting for created bucket
+```
+aws s3 website landing-page-dev-ivan \
+    --index-document index.html \
+    --error-document error.html
 ```
 
-### 2- AWS Bedrock reads and interprets message content
-* TBD
+3. Create origin acccess control - Save the returned Id → OAC_ID (E2DCGHQQAAYKAH)
 ```
-TBD
-```
-
-### 3- Store on inquiry data to RDS/Mysql
-* TBD
-```
-TBD
-```
-
-### 4- Depending on message data categorization, notification send via SES
-* TBD
-```
-TBD
+aws cloudfront create-origin-access-control \
+  --origin-access-control-config '{
+    "Name": "react-oac",
+    "OriginAccessControlOriginType": "s3",
+    "SigningBehavior": "always",
+    "SigningProtocol": "sigv4"
+  }'
 ```
 
-### 5- Create Cloudwatch events to trigger daily checks for auto follow-up
-* TBD
+4. Create distribution - Save the returned distribution ARN → DIST_ARN 
 ```
-TBD
+aws cloudfront create-distribution \
+  --distribution-config  file://distribution-config.json
 ```
+ 
+5. Attach bucket policy that allows CloudFront to read objects from the S3 bucket (update BUCKET_NAME and DIST_ARN)
+```
+aws s3api put-bucket-policy \
+  --bucket landing-page-dev-ivan \
+  --policy file://cf-bucket-policy.json
+```
+
+6. Create IAM user with programmatic access
+```
+aws iam create-user --user-name github-actions-deployer
+```
+
+7. Create access and secret keys - save output values for github use
+```
+aws iam create-access-key --user-name github-actions-deployer
+```
+
+8. Create policy to allow user to deploy to s3 - save output ARN
+```
+aws iam create-policy \
+    --policy-name GitHubActionsDeployPolicy \
+    --policy-document file://github-actions-policy.json
+```
+
+9. Attach the policy to the IAM user - get $ARN from previous step
+```
+aws iam attach-user-policy \
+  --user-name github-actions-deployer \
+  --policy-arn {$ARN}
+```
+
+10. Make some changes and push to project dev branch (landinghttps://github.com/olwenza/landing-page/) to trigger github auction to deploy to s3
+
+11. Get CloudFront URL
+```
+aws cloudfront list-distributions \
+  --query "DistributionList.Items[].{Id:Id,DomainName:DomainName}" \
+  --output table
+```
+
+12. View the website - copy and paste domain name from previous step on your browser and hard reset page.
 
 ## Authors
 

@@ -75,5 +75,5 @@ override.tf.json
 terraform.rc
 
 # Project compilation files
-lambda_dashboard.zip
-lambda_dashboard/
+.local
+.yaml
