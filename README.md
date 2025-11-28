@@ -29,6 +29,10 @@ Project handles customers inquiries via a business website
 | Vite               | Build tool            |
 | Tailwindcss        | CSS library           |
 | AWS Incognito      | User management       |
+| AWS Lambda         | Handle chatbot code   |
+| AWS API GW         | Route Lambda calls    |
+
+
 
 ## Getting Started
 
@@ -190,6 +194,11 @@ touch template.yaml
 7. Test lamda function locally
 ```
 echo '{"message": "How do I book?"}' | sam local invoke ChatBotFunction --event -
+```
+
+8. Test live functioning chatbot 
+```
+https://d11atov17l37i4.cloudfront.net/
 ```
 
 ## Authors
