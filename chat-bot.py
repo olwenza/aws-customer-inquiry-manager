@@ -86,9 +86,14 @@ def chat(query_text):
             "body": json.dumps({
                 "response": generated_text,
                 "citations": citations
-            })
+            }),
+            "headers": { 
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST, PUT, GET, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+            }
         }
-
+    
     except ClientError as e:
         logger.exception(f"ClientError: {e}") # Logs exception details automatically
         return {"error": f"ClientError: {e}"}
